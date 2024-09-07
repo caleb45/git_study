@@ -1,0 +1,256 @@
+# ------------------------------------------------
+# git CLI COMMANDS : 
+# https://mylko72.gitbooks.io/git/content/workflow.html
+# ------------------------------------------------
+
+
+Git은 파일을 Committed, Modified, Staged 이렇게 세가지 상태로 관리한다.
+
+	Commited - 데이터가 로컬 저장소에 안전하게 저장됐다는 것을 의미한다.
+	Modified - 수정한 파일을 아직 로컬 저장소에 커밋하지 않은 것을 말한다.
+	Staged - 현재 수정한 파일을 곧 커밋할 것이라고 표시한 상태를 의미한다.
+	
+Git 디렉토리에 있는 파일들은 Committed 상태이다. 파일을 수정하고 Staging Area에 추가했다면 Staged이다. 그리고 Checkout하고 나서 수정했지만, 아직 Staging Area에 추가하지 않았다면 Modified이다.
+
+
+
+
+# 1. 작업 디렉토리 만드는 방법 두가지
+# ------------------------ 
+1.1. 로컬 저장소 만들기 : $ git init
+# ------------------------
+$ git init
+
+# ------------------------
+1.2. 원격저장소 로컬에 복제하기 : git clone /로컬/저장소/경로
+# ------------------------
+git clone /로컬/저장소/경로
+
+
+
+# ------------------------
+# 2. add : 
+	$ git add . # 모든 파일
+	$ git add filename
+# ------------------------
+# 파일을 스테이징 영역(staging area)에 추가(add)한다.
+# 스테이징 영역은 저장소에 최종적으로 반영할 소스들을 선별해두는 가상의 공간이다. 
+# git add 명령을 통해서 working directory 의 파일들이 staging 상태가 되며, stataging 상태가 된 파일들은 commit 명령을 통해서 저장소에 반영된다. 
+# staging area에 포함된 파일들은 git status 명령시에 아래와 같이 표시된다.
+
+$ git add index.html script.js;
+$ git status
+
+
+
+# ------------------------
+# 3. add 제거 : $ git rm --cached filename
+# ------------------------
+# 파일을 스테이징 영역(staging area)에서 제거(remove)한다.
+# 스테이징 영역에 잘못 추가된 파일이 있다면 다시 untracked 시켜서 작업 디렉토리로 되돌릴 수 있다.
+$ git rm --cached script.js 
+
+
+
+# ------------------------
+4. 커밋(commit) : $ git commit -m 'message'
+# ------------------------
+# commit는 변경된 소스를 저장소에 저장하는 명령으로, staging area에 있는 파일들을 대상으로 이루어진다.
+# untracked된 파일들은 working directory에 그대로 남아 있다.
+$ git commit -m 'first commit add files';
+
+# 하지만 -a 매개변수는 새로운 파일이나 추적하지 않은 파일을 추가하지 않으며, 기존에 추적한 파일만 커밋한다.
+$ git commit -a -m 'add and commit license.txt'
+
+
+
+# ------------------------
+5. push : $ git push origin master
+# ------------------------
+# remote repository 에 저장
+$ git push origin master
+
+# 새로운 branch에서 push 
+$ git brach sub1 
+$ git push -u origin sub1 
+# repository에서 보면 main 브랜치 외에 sub1 브랜치가 만들어져 있고, 
+# 거기에 commit 된게 모두 저장되어 있음
+
+
+# ------------------------
+# 브랜치 생성
+# ------------------------
+$ git branch 브랜치명
+
+# 브랜치를 생성하는 명령어는 git branch이며 첫번째 매개변수는 생성하려는 브랜치명이고 두번째는 분기해 나올 브랜치명이다.
+# 이 명령어는 master 브랜치에서 RB_1.0이라는 브랜치를 생성한다. 브랜치명에서 사용한 RB는 릴리스 브랜치의 약어이다.
+$ git branch RB_1.0 master
+
+
+
+# ------------------------
+# 브랜치 삭제
+# ------------------------
+$ git branch -D (브랜치)
+# 로컬 브랜치를 삭제하려면 아래 명령어를 사용한다.
+# $ git branch -D utility
+# Deleted branch utility (was e7f33f9).
+
+
+
+# ------------------------
+# 브랜치명 변경하기 : $ git branch -m [브랜치명] [새로운 브랜치명]
+# ------------------------
+# 마스터 브랜치명을 바꾸려면 다음과 같이 한다.
+$ git branch -m master mymaster
+
+
+# ------------------------ ***************************
+# 브랜치 이동하기(Checkout) : $ git checkout (브랜치)
+# ------------------------ ***************************
+#현재 master 브랜치에서 gh-pages 브랜치로 이동하려면 checkout 명령어를 사용한다.
+$ git checkout gh-pages
+
+
+# ------------------------ ***************************
+# 브랜치 생성과 체크아웃 : $ git checkout -b (새로운 브랜치)
+# ------------------------ ***************************
+# 브랜치 생성과 체크아웃을 한번에 하려면 git checkout -b (branch이름)을 입력한다.
+# 새로운 브랜치가 생성되고 생성된 새로운 브랜치로 체크아웃된다.
+$ git checkout -b utility
+Switched to a new branch 'utility'
+
+
+
+
+# 브랜치 관리
+# ------------------------
+# 현재 브랜치 확인하기 : 
+	$ git branch
+	$ git branch -v
+# ------------------------
+# 현재 등록된 브랜치를 확인할려면 아래와 같이 한다.
+
+$ git branch
+* master
+  gh-pages
+
+# 등록된 브랜치의 상세한 정보를 볼려면 아래와 같이 한다.
+
+$ git branch -v
+* gh-pages e7f33f9 update html files
+  master   5c7085b Merge branch 'master' of github.com:mylko72/BalladBest
+
+
+# ------------------------
+# 브랜치 상태 확인 : 
+	$ git branch --merged
+	$ git branch --no-merged
+# ------------------------
+# 현재 Checkout한 브랜치를 기준으로 --merged와 --no-merged 옵션을 사용하여 Merge된 브랜치인지 그렇지 않은지 필터링해 볼 수 있다.
+# --merged 옵션
+# 이미 Merge한 브랜치 목록을 확인한다.
+
+$ git branch --merged
+ iss53
+*master
+# iss53 브랜치는 Merge한 브랜치로 목록에 나타난다. 
+# 또 * 기호가 붙어있지 않으므로 git branch -d 명령으로 삭제해도 되는 브랜치다.
+
+
+# --no-merged 옵션
+# 반대로 현재 Checkout한 브랜치에 Merge하지 않은 브랜치를 살펴본다.
+
+$ git branch --no-merged
+testing
+
+# Merge 하지 않은 커밋을 담고 있는 브랜치는 git branch -d 명령으로 삭제되지 않는다. 
+# Merge하지 않은 브랜치를 강제로 삭제하려면 -D 옵션으로 삭제한다.
+
+
+
+
+
+# ------------------------
+# 3-ways merge : 
+	git checkout merge
+	git merge "branchname"
+# ------------------------
+# master 브랜치로부터 분기된 feature/1 브랜치가 있다고 하자. 
+# master 브랜치에서는 stuff 라는 파일이 만들어져 aad6aa6 커밋까지 진행되었고 feature/1 브랜치에서는 stuff2라는 파일을 만들어 4a21cdc 커밋이 진행되었다. stuff 파일은 수정되지 않은 상태다.
+# 두 브랜치가 각각 커밋을 진행했고 서로 겹치게 수정한 파일은 없다고 하자. 
+# feature/1에서 진행된 사항들을 master 브랜치로 가져오고 싶다면 다음과 같이 한다.
+# 이처럼 서로 다른 두 커밋을 가진 브랜치가 하나로 병합하는 과정에서 두 브랜치가 양쪽의 이력을 그대로 보존하고자 병합 커밋을 만들면서 병합되는 것을 3-ways merge라고 한다
+$ git checkout master
+$ git merge feature/1
+
+
+
+
+
+# ------------------------
+# Fast-forward merge : 
+	$ git checkout master
+	$ git merge feature/1
+# ------------------------
+# feature/1 브랜치에서 두번의 커밋이 있다고 가정하자. 
+# 그리고 master 브랜치에서는 커밋이 진행되지 않았다.
+# 즉, 한쪽에서만 변경이 일어난 것이다.
+# 그리고 다음과 같이 feature/1 브랜치의 변경 사항들을 master 브랜치로 병합하자.
+
+$ git checkout master
+$ git merge feature/1
+Updating 65c8b16..6445bb5
+Fast-forward
+  stuff | 1 +
+  stuff | 1 +
+  2 files changed, 2 insertions(+)
+
+# 위와 같이 feature/1 브랜치에서만 변경사항이 발생했고 이를 master 브랜치로 병합하자 Fast-forward merge가 발생했다. 
+# 즉, 한쪽 브랜치에서만 일어난 변경사항을 다른 브랜치로 병합하는 방식이다.
+# 이때 --no-ff 플래그를 전달해 3-ways 병합처럼 만들 수 있다. 이는 병합하는 브랜치의 이력을 의도적으로 남기려고 사용한다.
+
+
+
+
+
+
+
+
+# ----------------------------------------------------------
+# miscellaneous git commands 
+# ----------------------------------------------------------
+# ----------------------------------------------------------
+# 작업할 파일을 생성
+# 새로운 파일은 touch 명령어를 사용하여 생성한다.
+$ touch index.html
+
+# ----------------------------------------------------------
+# git status 는 상태를 말해준다. 
+$ git status
+
+# $ git status
+# On branch main
+# Your branch is up to date with 'origin/main'.
+
+# Untracked files:
+#   (use "git add <file>..." to include in what will be committed)
+#         index.txt
+
+# nothing added to commit but untracked files present (use "git add" to track)
+# ----------------------------------------------------------
+## 작업 디렉토리의 파일이름 변경
+## 작업 디렉토리에 있는 파일의 이름을 변경 할 때는 git mv 명령어를 사용한다.
+
+$ git mv script.js common.js
+$ git status
+
+# 명령어를 실행하면 tracked 되어 staging 영역에 올라가며 commit 대기 상태가 된다. 
+# commit을 하면 파일 이름이 변경된다.
+$ git commit -m 'rename script.js'
+# ----------------------------------------------------------
+
+
+
+
+
